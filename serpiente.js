@@ -42,4 +42,30 @@ function dibujarTablero() {
 function dibujarTodo() {
   limpiarCanvas();
   dibujarTablero();
+
+  // PRUEBAS OBLIGATORIAS:
+  pintarParte(5, 5);   // Prueba 1
+  pintarParte(10, 2);  // Prueba 2
+  
+  // Asumiendo un canvas de 500x500 (20x20 celdas de 25px):
+  // Para 600x600 usar 23 en lugar de 19.
+  pintarParte(10, 19); // Prueba 3: Borde inferior
+  pintarParte(19, 10); // Prueba 4: Borde derecho
+  pintarParte(0, 10);  // Prueba 5: Borde izquierdo
+  pintarParte(19, 0);  // Prueba 6: Esquina superior derecha
+}
+
+function pintarParte(lineaX, lineaY, color = "#ef4444") {
+  // Calculamos la posición real en píxeles dentro del canvas
+  const x = lineaX * TAMANIO_CELDA;
+  const y = lineaY * TAMANIO_CELDA;
+
+  // Relleno
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, TAMANIO_CELDA, TAMANIO_CELDA);
+
+  // Borde
+  ctx.strokeStyle = "#020617";
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x, y, TAMANIO_CELDA, TAMANIO_CELDA);
 }
