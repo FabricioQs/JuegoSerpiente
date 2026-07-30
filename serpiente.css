@@ -1,142 +1,239 @@
+/* ==========================================================================
+   RESET & CONFIGURACIÓN GLOBAL
+   ========================================================================== */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
 }
 
 body {
     min-height: 100vh;
-    background: linear-gradient(135deg, #0f172a, #020617);
-    color: white;
+    background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+    color: #f8fafc;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
 }
 
+/* ==========================================================================
+   CONTENEDOR DE MAQUINA ARCADE
+   ========================================================================== */
 .contenedor-juego {
     width: 100%;
-    max-width: 720px;
+    max-width: 580px;
     background: #111827;
-    border-radius: 20px;
-    padding: 24px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    border-radius: 24px;
+    padding: 28px;
+    border: 1px solid #1f2937;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7),
+                0 0 30px rgba(56, 189, 248, 0.1);
     text-align: center;
 }
 
 h1 {
-    margin-bottom: 10px;
-    font-size: 32px;
-    color: #38bdf8; /* Título a juego con el borde */
+    margin-bottom: 6px;
+    font-size: 28px;
+    font-weight: 800;
+    color: #38bdf8;
+    text-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    letter-spacing: 1px;
 }
 
 .descripcion {
-    margin-bottom: 18px;
-    color: #cbd5e1;
-    line-height: 1.5;
+    margin-bottom: 20px;
+    color: #94a3b8;
+    font-size: 14px;
+    line-height: 1.4;
 }
 
+/* ==========================================================================
+   PANEL DE PUNTAJE Y ESTADO
+   ========================================================================== */
 .panel-info {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
 }
 
 .tarjeta-info {
     flex: 1;
-    min-width: 150px;
-    background: #1f2937;
-    padding: 14px;
-    border-radius: 14px;
-    border: 1px solid #374151;
+    background: #090d16;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #1e293b;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .tarjeta-info span {
     display: block;
-    font-size: 14px;
-    color: #94a3b8;
-    margin-bottom: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
 }
 
 .tarjeta-info strong {
-    font-size: 24px;
+    font-size: 22px;
+    font-weight: 800;
     color: #facc15;
+    text-shadow: 0 0 8px rgba(250, 204, 21, 0.3);
+}
+
+/* Ajuste de color para el texto de Estado */
+#estado {
+    color: #38bdf8;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+}
+
+/* ==========================================================================
+   CANVAS (ÁREA DE JUEGO)
+   ========================================================================== */
+.contenedor-canvas {
+    width: 100%;
+    margin: 0 auto 20px auto;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
 }
 
 canvas {
     width: 100%;
-    max-width: 500px;
-    background: #090d16; /* Fondo azul oscuro nocturno */
-    border: 4px solid #38bdf8; /* Borde cian brillante */
+    height: auto;
+    aspect-ratio: 1 / 1;
+    background: #090d16;
+    border: 3px solid #38bdf8;
     border-radius: 16px;
     display: block;
+}
+
+/* ==========================================================================
+   CONTROLES D-PAD Y BOTONES
+   ========================================================================== */
+.controles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 240px;
+    gap: 8px;
     margin: 0 auto 20px auto;
 }
 
-.controles {
-    display: grid;
-    grid-template-columns: repeat(3, 90px);
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 18px;
-}
-
-.controles button,
-.acciones button {
+.controles button {
+    aspect-ratio: 1 / 1;
+    font-size: 18px;
     border: none;
     border-radius: 12px;
-    padding: 12px 16px;
-    background: #38bdf8;
-    color: #020617;
-    font-weight: bold;
+    background: #1e293b;
+    color: #f8fafc;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.15s ease;
+    border: 1px solid #334155;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.controles button:hover,
-.acciones button:hover {
-    transform: scale(1.05);
-    background: #f6f6f4;
+.controles button:not(.vacio):hover {
+    background: #38bdf8;
+    color: #020617;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+.controles button:not(.vacio):active {
+    transform: translateY(0);
 }
 
 .vacio {
     visibility: hidden;
+    pointer-events: none;
 }
 
+/* ==========================================================================
+   BOTONES PRINCIPALES (INICIAR / REINICIAR)
+   ========================================================================== */
 .acciones {
     display: flex;
     justify-content: center;
     gap: 12px;
-    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.acciones button {
+    flex: 1;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-principal {
+    background: #38bdf8;
+    color: #020617;
+    box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+}
+
+.btn-principal:hover {
+    background: #7dd3fc;
+    transform: translateY(-2px);
 }
 
 .acciones .secundario {
-    background: #38bdf8;
-    color: #082f49;
+    background: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #334155;
 }
 
+.acciones .secundario:hover {
+    background: #334155;
+    transform: translateY(-2px);
+}
+
+.acciones button:active {
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   BARRA DE MENSAJES
+   ========================================================================== */
 .mensaje {
-    margin-top: 14px;
+    background: #090d16;
+    border: 1px dashed #334155;
+    padding: 10px 14px;
+    border-radius: 10px;
     color: #e2e8f0;
-    min-height: 24px;
-    font-weight: bold;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
 }
 
-@media (max-width: 520px) {
+/* ==========================================================================
+   DISEÑO ADAPTATIVO (MÓVILES)
+   ========================================================================== */
+@media (max-width: 480px) {
+    .contenedor-juego {
+        padding: 18px;
+    }
+
     h1 {
-        font-size: 24px;
+        font-size: 22px;
     }
 
     .controles {
-        grid-template-columns: repeat(3, 75px);
-    }
-
-    .controles button,
-    .acciones button {
-        padding: 10px;
+        max-width: 200px;
     }
 }
